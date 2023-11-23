@@ -4,12 +4,22 @@
  */
 package gui;
 
+import java.awt.Image;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author Seth
  */
 public class frmProducto extends javax.swing.JFrame {
 
+    byte[] datosImagen;
     /**
      * Creates new form frmProducto
      */
@@ -84,6 +94,11 @@ public class frmProducto extends javax.swing.JFrame {
         btnBuscarImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagen.png"))); // NOI18N
         btnBuscarImage.setText("     Buscar");
         btnBuscarImage.setActionCommand("Buscar");
+        btnBuscarImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarImageActionPerformed(evt);
+            }
+        });
 
         lblImageProd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImageProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/picture.png"))); // NOI18N
@@ -327,6 +342,40 @@ public class frmProducto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBuscarImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarImageActionPerformed
+        JFileChooser file = new JFileChooser();
+        file.showOpenDialog(this);
+        
+        File archivo = file.getSelectedFile();
+        
+        if(archivo != null){
+            try {
+                String ruta = archivo.getPath();
+                datosImagen = leerImagenComoBytes(ruta);
+                
+                
+                ImageIcon icon = new ImageIcon(ruta);
+                Image image = icon.getImage().getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
+                icon = new ImageIcon(image);
+                
+                lblImageProd.setIcon(icon);
+            } catch (IOException ex) {
+                Logger.getLogger(frmProducto.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnBuscarImageActionPerformed
+
+     private static byte[] leerImagenComoBytes(String rutaImagen) throws IOException {
+        File file = new File(rutaImagen);
+        byte[] datosImagen = new byte[(int) file.length()];
+
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+            fileInputStream.read(datosImagen);
+        }
+
+        return datosImagen;
+    }
+    
     /**
      * @param args the command line arguments
      */

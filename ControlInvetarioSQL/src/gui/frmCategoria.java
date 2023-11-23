@@ -4,17 +4,27 @@
  */
 package gui;
 
+import ModeloJDBC.CategoriaJDBC;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Seth
  */
 public class frmCategoria extends javax.swing.JFrame {
 
+    boolean nuevo = true;
+    int id = 0;
+    CategoriaJDBC cat = new CategoriaJDBC();
+
     /**
      * Creates new form frmCategoria
      */
     public frmCategoria() {
         initComponents();
+        cargarDatos(null);
     }
 
     /**
@@ -43,6 +53,15 @@ public class frmCategoria extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lista de Categorías", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
+        txtBuscarCat.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBuscarCatKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarCatKeyReleased(evt);
+            }
+        });
+
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Buscar:");
 
@@ -57,6 +76,11 @@ public class frmCategoria extends javax.swing.JFrame {
 
             }
         ));
+        tblListaCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblListaCategoriasMousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblListaCategorias);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -95,6 +119,11 @@ public class frmCategoria extends javax.swing.JFrame {
 
         btnGuardarCat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/save.png"))); // NOI18N
         btnGuardarCat.setText("Guardar");
+        btnGuardarCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarCatActionPerformed(evt);
+            }
+        });
 
         btnEliminarCat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/delete.png"))); // NOI18N
         btnEliminarCat.setText("Eliminar");
@@ -165,6 +194,63 @@ public class frmCategoria extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnGuardarCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCatActionPerformed
+        //Se obtiene el dato de control
+        String nombre = txtNombreCat.getText();
+        int row;
+        //Se llama al metodo de inserción 
+        if (nuevo) {
+
+            row = cat.registrarCategoria(nombre);
+
+        } else {
+            row = cat.modificarCategoria(id, nombre);
+        }
+        
+        if (row > 0) {
+            cargarDatos(null);
+            JOptionPane.showMessageDialog(this, "Categoría Agregada Con Éxito");
+        } else {
+            JOptionPane.showMessageDialog(this, "Ocurrio un Error al Agregar la Categoría ", "", JOptionPane.ERROR_MESSAGE);
+        }
+        limpiarDatos();
+    }//GEN-LAST:event_btnGuardarCatActionPerformed
+
+    private void txtBuscarCatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCatKeyPressed
+      
+       
+    }//GEN-LAST:event_txtBuscarCatKeyPressed
+
+    private void txtBuscarCatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCatKeyReleased
+         String filtro = txtBuscarCat.getText();    
+       
+        cargarDatos(filtro);
+    }//GEN-LAST:event_txtBuscarCatKeyReleased
+
+    private void tblListaCategoriasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblListaCategoriasMousePressed
+        JTable table = (JTable) evt.getSource();
+//        Point point = evt.getPoint();
+//        int row = table.rowAtPoint(point);
+        
+id = Integer.parseInt(tblListaCategorias.getValueAt(tblListaCategorias.getSelectedRow(), 0).toString());
+        txtNombreCat.setText(tblListaCategorias.getValueAt(tblListaCategorias.getSelectedRow(), 1).toString()  );
+        
+        if(id>0){
+         nuevo = false;
+        }
+    }//GEN-LAST:event_tblListaCategoriasMousePressed
+
+    public void limpiarDatos() {
+        txtNombreCat.setText("");
+        txtBuscarCat.setText("");
+    }
+
+    public void cargarDatos(String categoria) {
+
+        DefaultTableModel modelo = cat.consultarCategorias(categoria);
+        tblListaCategorias.setModel(modelo);
+    }
 
     /**
      * @param args the command line arguments

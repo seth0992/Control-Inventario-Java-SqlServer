@@ -4,8 +4,11 @@
  */
 package controlinventariosql;
 
+import ConexionBD.conexionSQLServer;
 import com.formdev.flatlaf.FlatLightLaf;
 import gui.frmMenuGeneral;
+import java.sql.Connection;
+import java.sql.SQLException;
 import javax.swing.UIManager;
 
 /**
@@ -31,7 +34,25 @@ public class ControlInventarioSQL {
         menu.setLocationRelativeTo(null);
         menu.setVisible(true);
         
-        
+        //testConexion();
+    }
+    
+    public static void testConexion(){
+     Connection conexion = null;
+
+        try {
+            // Obtén la conexión utilizando el método getConnection de la clase conexionSQLServer
+            conexion = conexionSQLServer.getConnection();
+
+            // Si no se lanzó ninguna excepción, la conexión fue exitosa
+            System.out.println("Conexión exitosa a la base de datos");
+        } catch (SQLException e) {
+            System.out.println("Error al conectar a la base de datos");
+            e.printStackTrace();
+        } finally {
+            // Asegúrate de cerrar la conexión al finalizar
+            conexionSQLServer.close(conexion);
+        }
     }
     
 }
