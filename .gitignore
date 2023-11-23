@@ -22,3 +22,7 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+/ControlInvetarioSQL/nbproject/private/
+/ControlInvetarioSQL/build/
+!/ControlInvetarioSQL/src/libs/flatlaf-3.2.5.jar
+!/ControlInvetarioSQL/src/libs/mssql-jdbc-12.4.2.jre11.jar
