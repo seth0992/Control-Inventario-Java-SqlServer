@@ -26,3 +26,5 @@ replay_pid*
 /ControlInvetarioSQL/build/
 !/ControlInvetarioSQL/src/libs/flatlaf-3.2.5.jar
 !/ControlInvetarioSQL/src/libs/mssql-jdbc-12.4.2.jre11.jar
+/Ejercicio1-GUI/nbproject/private/
+/Ejercicio1-GUI/build/

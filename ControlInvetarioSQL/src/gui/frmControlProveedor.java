@@ -4,19 +4,46 @@
  */
 package gui;
 
+import ModeloJDBC.ProveedorJDBC;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Seth
  */
 public class frmControlProveedor extends javax.swing.JFrame {
 
+    //Atributos de la clase
+    boolean nuevoProv = true;
+    int idProveedor = 0;
+    ProveedorJDBC provJDBC = new ProveedorJDBC();
+    
     /**
      * Creates new form frmControlProveedor
      */
     public frmControlProveedor() {
         initComponents();
+        cargarDatos(null);
     }
 
+    public void limpiarDatos() {
+        txtNombreProv.setText("");
+        txtBuscarProv.setText("");
+        txtTelefonoProv.setText("");
+        txaDireccionProv.setText("");
+        idProveedor = 0;
+        nuevoProv = true;
+    }
+
+    public void cargarDatos(String filtro) {
+
+        //VCarga el modelo de la tabla con sus datos, gracias al metodo ConsultarCategoria del JDBC
+        DefaultTableModel modelo = provJDBC.consultarProveedores(filtro);
+        tblListaProveedores.setModel(modelo);
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,7 +71,7 @@ public class frmControlProveedor extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtBuscarProv = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblListraProveedores = new javax.swing.JTable();
+        tblListaProveedores = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,12 +113,27 @@ public class frmControlProveedor extends javax.swing.JFrame {
 
         btnGuardarProv.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/save.png"))); // NOI18N
         btnGuardarProv.setText("Guardar");
+        btnGuardarProv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarProvActionPerformed(evt);
+            }
+        });
 
         btnEliminarProv.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/delete.png"))); // NOI18N
         btnEliminarProv.setText("Eliminar");
+        btnEliminarProv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarProvActionPerformed(evt);
+            }
+        });
 
         btnLimpiarProv.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/clean.png"))); // NOI18N
         btnLimpiarProv.setText("Limpiar");
+        btnLimpiarProv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarProvActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -149,7 +191,13 @@ public class frmControlProveedor extends javax.swing.JFrame {
 
         jLabel5.setText("Filtro:");
 
-        tblListraProveedores.setModel(new javax.swing.table.DefaultTableModel(
+        txtBuscarProv.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarProvKeyReleased(evt);
+            }
+        });
+
+        tblListaProveedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -160,7 +208,12 @@ public class frmControlProveedor extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(tblListraProveedores);
+        tblListaProveedores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tblListaProveedoresMouseReleased(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblListaProveedores);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -235,40 +288,82 @@ public class frmControlProveedor extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(frmControlProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(frmControlProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(frmControlProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(frmControlProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new frmControlProveedor().setVisible(true);
-//            }
-//        });
-//    }
+    private void btnGuardarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProvActionPerformed
+        //Obtener el dato del textfield       
+        String nombreProv = txtNombreProv.getText(); 
+        String telefono = txtTelefonoProv.getText();
+        String direccion = txaDireccionProv.getText();
+               
+
+        if (nombreProv.equals("")) {
+            JOptionPane.showMessageDialog(this, "Debes digitar una nombre para el proveedor");
+            return;
+        }
+        int row = 0;
+        if (nuevoProv) {
+            row = provJDBC.registrarProveedor(nombreProv,direccion,telefono); //Llamar al metodo que encarga de registrar la categoria  
+
+            if (row > 0) {
+                JOptionPane.showMessageDialog(this, "Se Registro el Proveedor");
+            } else {
+                JOptionPane.showMessageDialog(this, "No Se Registro el Proveedor", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            row = provJDBC.modificarProv(idProveedor, nombreProv,direccion,telefono); //Llamar al metodo que encarga de registrar la categoria 
+            if (row > 0) {
+                JOptionPane.showMessageDialog(this, "Se Modifico el proveedor");
+            } else {
+                JOptionPane.showMessageDialog(this, "No Se Modifico el Proveedor", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        limpiarDatos();
+        cargarDatos(null);
+    }//GEN-LAST:event_btnGuardarProvActionPerformed
+
+    private void btnEliminarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProvActionPerformed
+           if(idProveedor == 0){
+              JOptionPane.showMessageDialog(this, "Debes seleccionar un Proveedor para eliminarlo", "Error", JOptionPane.ERROR_MESSAGE);
+              return;
+        }
+        
+       int opcion = JOptionPane.showConfirmDialog(this, "Esta segura que desea eliminar la proveedor seleccionada?");
+        
+       if(opcion == 0){
+          provJDBC.eliminarProveedor(idProveedor);
+          JOptionPane.showMessageDialog(this, "Se elimino el proveedor");
+          limpiarDatos();
+          cargarDatos(null);
+       }  
+    }//GEN-LAST:event_btnEliminarProvActionPerformed
+
+    private void txtBuscarProvKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarProvKeyReleased
+          String filtro = txtBuscarProv.getText();
+        //Se invoca el método para cargar los datos pero se le pasa como parametro el texto a buscar 
+        cargarDatos(filtro);
+    }//GEN-LAST:event_txtBuscarProvKeyReleased
+
+    private void tblListaProveedoresMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblListaProveedoresMouseReleased
+         idProveedor = Integer.parseInt(tblListaProveedores.getValueAt(tblListaProveedores.getSelectedRow(), 0).toString());
+         
+        txtNombreProv.setText(tblListaProveedores.getValueAt(tblListaProveedores.getSelectedRow(), 1).toString());
+        
+        txaDireccionProv.setText(tblListaProveedores.getValueAt(tblListaProveedores.getSelectedRow(), 2).toString());
+        
+       txtTelefonoProv.setText(tblListaProveedores.getValueAt(tblListaProveedores.getSelectedRow(), 3).toString());       
+              
+        if (idProveedor > 0) {
+            nuevoProv = false;
+        }
+        
+    }//GEN-LAST:event_tblListaProveedoresMouseReleased
+
+    private void btnLimpiarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarProvActionPerformed
+       limpiarDatos();
+    }//GEN-LAST:event_btnLimpiarProvActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEliminarProv;
@@ -285,7 +380,7 @@ public class frmControlProveedor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable tblListraProveedores;
+    private javax.swing.JTable tblListaProveedores;
     private javax.swing.JTextArea txaDireccionProv;
     private javax.swing.JTextField txtBuscarProv;
     private javax.swing.JTextField txtNombreProv;

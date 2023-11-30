@@ -15,9 +15,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class frmCategoria extends javax.swing.JFrame {
 
-    boolean nuevo = true;
-    int id = 0;
-    CategoriaJDBC cat = new CategoriaJDBC();
+    boolean nuevo = true; //Indicador para saber si es una categoría nueva
+    int idCategoria = 0; //Almacenara el Id de la categoría a modificar/eliminar
+    CategoriaJDBC cat = new CategoriaJDBC(); // Instancia de jdbc para el uso de los métodos
 
     /**
      * Creates new form frmCategoria
@@ -49,7 +49,7 @@ public class frmCategoria extends javax.swing.JFrame {
         btnEliminarCat = new javax.swing.JButton();
         btnLimpiarCat = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lista de Categorías", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
@@ -127,9 +127,19 @@ public class frmCategoria extends javax.swing.JFrame {
 
         btnEliminarCat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/delete.png"))); // NOI18N
         btnEliminarCat.setText("Eliminar");
+        btnEliminarCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarCatActionPerformed(evt);
+            }
+        });
 
         btnLimpiarCat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/clean.png"))); // NOI18N
         btnLimpiarCat.setText("Limpiar");
+        btnLimpiarCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarCatActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -196,58 +206,89 @@ public class frmCategoria extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCatActionPerformed
-        //Se obtiene el dato de control
-        String nombre = txtNombreCat.getText();
-        int row;
-        //Se llama al metodo de inserción 
+
+        String nombreCat = txtNombreCat.getText(); //Obtener el dato del textfield
+
+        if (nombreCat.equals("")) {
+            JOptionPane.showMessageDialog(this, "Debes digitar una nombre para la Categoría");
+            return;
+        }
+        int row = 0;
         if (nuevo) {
 
-            row = cat.registrarCategoria(nombre);
+            row = cat.registrarCategoria(nombreCat); //Llamar al metodo que encarga de registrar la categoria  
 
+            if (row > 0) {
+                JOptionPane.showMessageDialog(this, "Se Registro la Categoría");
+            } else {
+                JOptionPane.showMessageDialog(this, "No Se Registro la Categoría", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         } else {
-            row = cat.modificarCategoria(id, nombre);
+            row = cat.modificarCategoria(idCategoria, nombreCat); //Llamar al metodo que encarga de registrar la categoria 
+            if (row > 0) {
+                JOptionPane.showMessageDialog(this, "Se Modifico la Categoría");
+            } else {
+                JOptionPane.showMessageDialog(this, "No Se Modifico la Categoría", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         }
-        
-        if (row > 0) {
-            cargarDatos(null);
-            JOptionPane.showMessageDialog(this, "Categoría Agregada Con Éxito");
-        } else {
-            JOptionPane.showMessageDialog(this, "Ocurrio un Error al Agregar la Categoría ", "", JOptionPane.ERROR_MESSAGE);
-        }
+
         limpiarDatos();
+        cargarDatos(null);
     }//GEN-LAST:event_btnGuardarCatActionPerformed
 
     private void txtBuscarCatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCatKeyPressed
-      
-       
+
+
     }//GEN-LAST:event_txtBuscarCatKeyPressed
 
     private void txtBuscarCatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCatKeyReleased
-         String filtro = txtBuscarCat.getText();    
-       
+        String filtro = txtBuscarCat.getText();
+        //Se invoca el método para cargar los datos pero se le pasa como parametro el texto a buscar 
         cargarDatos(filtro);
     }//GEN-LAST:event_txtBuscarCatKeyReleased
 
     private void tblListaCategoriasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblListaCategoriasMousePressed
-        JTable table = (JTable) evt.getSource();
-//        Point point = evt.getPoint();
-//        int row = table.rowAtPoint(point);
-        
-id = Integer.parseInt(tblListaCategorias.getValueAt(tblListaCategorias.getSelectedRow(), 0).toString());
-        txtNombreCat.setText(tblListaCategorias.getValueAt(tblListaCategorias.getSelectedRow(), 1).toString()  );
-        
-        if(id>0){
-         nuevo = false;
+
+        idCategoria = Integer.parseInt(tblListaCategorias.getValueAt(tblListaCategorias.getSelectedRow(), 0).toString());
+        txtNombreCat.setText(tblListaCategorias.getValueAt(tblListaCategorias.getSelectedRow(), 1).toString());
+
+        if (idCategoria > 0) {
+            nuevo = false;
         }
     }//GEN-LAST:event_tblListaCategoriasMousePressed
+
+    private void btnLimpiarCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarCatActionPerformed
+        limpiarDatos();
+    }//GEN-LAST:event_btnLimpiarCatActionPerformed
+
+    private void btnEliminarCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarCatActionPerformed
+       if(idCategoria == 0){
+              JOptionPane.showMessageDialog(this, "Debes seleccionar una categoría para eliminarla", "Error", JOptionPane.ERROR_MESSAGE);
+              return;
+        }
+        
+       int opcion = JOptionPane.showConfirmDialog(this, "Esta segura que desea eliminar la categoía seleccionada?");
+        
+       if(opcion == 0){
+          cat.eliminarCategoria(idCategoria);
+          JOptionPane.showMessageDialog(this, "Se elimino la Categoría");
+          limpiarDatos();
+          cargarDatos(null);
+       }   
+    }//GEN-LAST:event_btnEliminarCatActionPerformed
 
     public void limpiarDatos() {
         txtNombreCat.setText("");
         txtBuscarCat.setText("");
+        idCategoria = 0;
+        nuevo = true;
     }
 
     public void cargarDatos(String categoria) {
 
+        //VCarga el modelo de la tabla con sus datos, gracias al metodo ConsultarCategoria del JDBC
         DefaultTableModel modelo = cat.consultarCategorias(categoria);
         tblListaCategorias.setModel(modelo);
     }

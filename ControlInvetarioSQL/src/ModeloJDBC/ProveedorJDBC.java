@@ -15,14 +15,15 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Seth
  */
-public class CategoriaJDBC {
-    private final String SQL_INSERT_SP = "{CALL spCrearCategoria(?)}";
-    private final String SQL_UPDATE_SP = "{CALL spActualizarCategoria(?,?)}";
-    private final String SQL_DELETE_SP = "{CALL spEliminarCategoria(?)}";
-    private final String SQL_SELECT_SP = "{CALL spObtenerCategorias(?)}";
+public class ProveedorJDBC {
 
-    //Método para registrar la categoria
-    public int registrarCategoria(String nombreCategoria) {
+    private final String SQL_INSERT_SP = "{CALL spCrearProveedor(?,?,?)}";
+    private final String SQL_UPDATE_SP = "{CALL spActualizarProveedor(?,?,?,?)}";
+    private final String SQL_DELETE_SP = "{CALL spEliminarProveedor(?)}";
+    private final String SQL_SELECT_SP = "{CALL spObtenerProveedores(?)}";
+
+    //Método para registrar la Proveedor
+    public int registrarProveedor(String nombreProv, String direccionProv, String telefonoProv) {
 
         //Objeto de conexión
         Connection conn = null;
@@ -37,10 +38,12 @@ public class CategoriaJDBC {
             cstmt = conn.prepareCall(SQL_INSERT_SP); //Se prepara la llamada al procedimiento 
 
             //Se Sustituye los valores a enviar en el procedimiento almacenado
-            cstmt.setString(1, nombreCategoria);
+            cstmt.setString(1, nombreProv);
+            cstmt.setString(2, direccionProv);
+            cstmt.setString(3, telefonoProv);
 
             //Se ejecuta la consulta
-            System.out.println("Ejecutando la Registro de Categoria");
+            System.out.println("Ejecutando la Registro de Proveedor");
             cstmt.execute();
             filaAfectadas = cstmt.getUpdateCount();
 
@@ -55,8 +58,8 @@ public class CategoriaJDBC {
 
     }
 
-    //Método para modificar Categoria
-    public int modificarCategoria(int idCategoria, String nombreCategoria) {
+    //Método para modificar Proveedor
+    public int modificarProv(int idProv, String nombreProv, String direccionProv, String telefonoProv) {
 
         //Objeto de conexión
         Connection conn = null;
@@ -71,11 +74,13 @@ public class CategoriaJDBC {
             cstmt = conn.prepareCall(SQL_UPDATE_SP); //Se prepara la llamada al procedimiento 
 
             //Se Sustituye los valores a enviar en el procedimiento almacenado
-            cstmt.setInt(1, idCategoria);
-            cstmt.setString(2, nombreCategoria);
+            cstmt.setInt(1, idProv);
+            cstmt.setString(2, nombreProv);
+            cstmt.setString(3, direccionProv);
+            cstmt.setString(4, telefonoProv);
 
             //Se ejecuta la consulta
-            System.out.println("Ejecutando la Registro de Categoria");
+            System.out.println("Ejecutando la Modifico el proveedor");
             cstmt.execute();
             filaAfectadas = cstmt.getUpdateCount();
 
@@ -90,8 +95,8 @@ public class CategoriaJDBC {
 
     }
 
-    //Método para eliminar Categoria
-    public int eliminarCategoria(int idCategoria) {
+    //Método para eliminar proveedor
+    public int eliminarProveedor(int idProv) {
 
         //Objeto de conexión
         Connection conn = null;
@@ -106,10 +111,10 @@ public class CategoriaJDBC {
             cstmt = conn.prepareCall(SQL_DELETE_SP); //Se prepara la llamada al procedimiento 
 
             //Se Sustituye los valores a enviar en el procedimiento almacenado
-            cstmt.setInt(1, idCategoria);
+            cstmt.setInt(1, idProv);
 
             //Se ejecuta la consulta
-            System.out.println("Ejecutando la Registro de Categoria");
+            System.out.println("Ejecutando la elimino el proveedor");
             cstmt.execute();
             filaAfectadas = cstmt.getUpdateCount();
 
@@ -123,8 +128,8 @@ public class CategoriaJDBC {
         return filaAfectadas;
     }
 
-    //Método para obtener las categorias
-    public DefaultTableModel consultarCategorias(String nombreCat) {
+    //Método para obtener las proveedores
+    public DefaultTableModel consultarProveedores(String nombreProv) {
         //Objeto de conexión
         Connection conn = null;
         // prepareCall -> para realizar el llamado del procedimiento almacenado
@@ -132,10 +137,11 @@ public class CategoriaJDBC {
         ResultSet rs = null;
 
         //Creación del modelo de la tabla
-       DefaultTableModel modeloTabla = new DefaultTableModel();
-       modeloTabla.addColumn("ID");
-       modeloTabla.addColumn("Nombre");
-       
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        modeloTabla.addColumn("ID");
+        modeloTabla.addColumn("Nombre");
+        modeloTabla.addColumn("Dirección");
+        modeloTabla.addColumn("Teléfono");
         
         try {
 
@@ -143,10 +149,10 @@ public class CategoriaJDBC {
             cstmt = conn.prepareCall(SQL_SELECT_SP, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY); //Se prepara la llamada al procedimiento 
 
             //Se Sustituye los valores a enviar en el procedimiento almacenado
-            cstmt.setString(1, nombreCat);
+            cstmt.setString(1, nombreProv);
 
             //Se ejecuta la consulta
-            System.out.println("Ejecutando consulta de Categoria");
+            System.out.println("Ejecutando consulta de Proveedor");
             boolean resultado = cstmt.execute();
 
             // Comprobar si hay un conjunto de resultados
@@ -155,12 +161,14 @@ public class CategoriaJDBC {
                 rs = cstmt.getResultSet();
                 while (rs.next()) {
                     // Acceder a los datos de cada fila
-                    int id = rs.getInt("idCategoria");
-                    String nombre = rs.getString("nombre");                  
-                    modeloTabla.addRow(new Object[]{id, nombre});
+                    int id = rs.getInt("idProveedor");
+                    String nombre = rs.getString("nombre");
+                     String direccion = rs.getString("direccion");
+                      String telefono = rs.getString("telefono");
+                    modeloTabla.addRow(new Object[]{id, nombre,direccion, telefono});
                 }
-            } 
-
+            }
+			
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {

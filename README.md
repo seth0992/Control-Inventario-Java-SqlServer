@@ -9,7 +9,7 @@ Para efectos de este laboratorio el o la estudiante aprenderá el proceso de con
 1. [JAVA JDK 11 o Superior](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) - [Guía instalación](https://seth09work.notion.site/Instalaci-n-del-JDK-de-JAVA-eae5ce9e6e8b459284099ce17b494799?pvs=4)
 2. [NetBeans en su versión 17 o superior](https://netbeans.apache.org/) - [Guía instalación](https://seth09work.notion.site/Instalaci-n-de-Netbeans-IDE-JAVA-5ff0d7538f4246cf94d02c2cafeceaf2?pvs=4)
 3. [SQL Server Express 2019 o superior.](https://www.microsoft.com/es-es/sql-server/sql-server-downloads) 
-4. [SQL Server Management Studio (SSMS) en su ultima versión](https://learn.microsoft.com/es-es/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16) - [Guía Instalación de SQL SERVER 2019 & SSMS](https://seth09work.notion.site/Instalaci-n-del-JDK-de-JAVA-eae5ce9e6e8b459284099ce17b494799?pvs=4)
+4. [SQL Server Management Studio (SSMS) en su ultima versión](https://learn.microsoft.com/es-es/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16) - [Guía Instalación de SQL SERVER 2019 & SSMS](https://seth09work.notion.site/Instalaci-n-y-configuraci-n-del-sistema-gestor-de-bases-de-datos-de-SQL-SERVER-9027a9827de34d9a82076f2caaa3f706?pvs=4)
 5. [JDBC de SQL SERVER para JAVA.](https://learn.microsoft.com/en-us/sql/connect/jdbc/microsoft-jdbc-driver-for-sql-server?view=sql-server-ver16)
 
 ## Que es JDBC
@@ -63,9 +63,9 @@ Luego se deberá dar clic en el botón **Aplicar** y para que los cambios surtan
 
 #### 1. Crear usuario en SQL SERVER.
 
-Para este paso se deberá tener encuenta que en la [Guía de Instalación de SQL SERVER 2019 & SSMS](https://seth09work.notion.site/Instalaci-n-del-JDK-de-JAVA-eae5ce9e6e8b459284099ce17b494799?pvs=4), se habilita la autenticación para usuario SQL SERVER, por lo que se da por entendido que ya se encuentra activado, por lo que se procede a crear el usuario:
+Para este paso se deberá tener en cuenta que en la [Guía de Instalación de SQL SERVER 2019 & SSMS](https://seth09work.notion.site/Instalaci-n-y-configuraci-n-del-sistema-gestor-de-bases-de-datos-de-SQL-SERVER-9027a9827de34d9a82076f2caaa3f706?pvs=4), se habilita la autenticación para usuario SQL SERVER, por lo que se da por entendido que ya se encuentra activado, por lo que se procede a crear el usuario:
 
-1. Se debera dar clic en la carpeta **Security**, luego clic derecho en **Logins** y luego en **New Login**
+1. Se deberá dar clic en la carpeta **Security**, luego clic derecho en **Logins** y luego en **New Login**
 
 ![Usuario1](./img/Usuario1.png)
 
@@ -92,7 +92,7 @@ GO
 USE dbControlInventario;
 GO
 
---Tabla de control de Categorias
+--Tabla de control de Categorías
 CREATE TABLE tblCategoria(
 	idCategoria INT PRIMARY KEY IDENTITY,
 	nombre VARCHAR(60) NOT NULL
@@ -230,7 +230,7 @@ BEGIN
 END;
 GO
 
---Procedimiento para consultar las categorias
+--Procedimiento para consultar las categorías
 CREATE PROCEDURE spObtenerCategorias
 @nombre VARCHAR(60) = NULL
 AS
@@ -342,7 +342,7 @@ En la clase creada anteriormente se deberá crear el código necesario para real
     private static String JDBC_USER = "user1";
     //String que especifica la contraseña del usuario con el que se conectara a la BD
     private static String JDBC_PASS = "1234";
-    //Variable que almancena el driver creado.
+    //Variable que almacena el driver creado.
     private static Driver driver = null;
     //String que especifica la ruta de conexión a la base de datos 
     private static String JDBC_URL = "jdbc:sqlserver://localhost:1433;databaseName="+JDBC_DB+";encrypt=false";
@@ -441,7 +441,7 @@ public class conexionSQLServer {
     private static String JDBC_USER = "user1";
     //String que especifica la contraseña del usuario con el que se conectara a la BD
     private static String JDBC_PASS = "1234";
-    //Variable que almancena el driver creado.
+    //Variable que almacena el driver creado.
     private static Driver driver = null;
     //String que especifica la ruta de conexión a la base de datos 
     private static String JDBC_URL = "jdbc:sqlserver://localhost:1433;databaseName="+JDBC_DB+";encrypt=false";
@@ -1084,13 +1084,15 @@ Para ello se necesitara crear un nuevo paquete para almacenar las clases JDBC co
 
 ![ModeloJDBC](./img/ModeloJDBC.png)
 
+#### Modulo de Control de Categorías.
+
 ##### CategoriaJDBC
 
 En este punto se iniciara a crear la lógica para la interacción con la base de datos, comenzado por la tabla de categorías, por ellos vamos a crear una clase **CategoriaJDBC** dentro del paquete **ModeloJDBC**
 
 ![CategoriaJDBC](./img/CategoriaJDBC.png)
  
- ahora se deberá digitar el siguiente código el cual contiene las instrucciones para el procesamiento de los datos:
+ Ahora se deberá digitar el siguiente código el cual contiene las instrucciones para el procesamiento de los datos:
 
  ```java
 
@@ -1128,7 +1130,7 @@ public class CategoriaJDBC {
             conn = conexionSQLServer.getConnection(); //Se obtiene la conexion desde la clase Conexion SQL Server
             cstmt = conn.prepareCall(SQL_INSERT_SP); //Se prepara la llamada al procedimiento 
 
-            //Se Sustitulle los valores a enviar en el procedimiento almacenado
+            //Se Sustituye los valores a enviar en el procedimiento almacenado
             cstmt.setString(1, nombreCategoria);
 
             //Se ejecuta la consulta
@@ -1162,7 +1164,7 @@ public class CategoriaJDBC {
             conn = conexionSQLServer.getConnection(); //Se obtiene la conexion desde la clase Conexion SQL Server
             cstmt = conn.prepareCall(SQL_UPDATE_SP); //Se prepara la llamada al procedimiento 
 
-            //Se Sustitulle los valores a enviar en el procedimiento almacenado
+            //Se Sustituye los valores a enviar en el procedimiento almacenado
             cstmt.setInt(1, idCategoria);
             cstmt.setString(2, nombreCategoria);
 
@@ -1197,7 +1199,7 @@ public class CategoriaJDBC {
             conn = conexionSQLServer.getConnection(); //Se obtiene la conexion desde la clase Conexion SQL Server
             cstmt = conn.prepareCall(SQL_DELETE_SP); //Se prepara la llamada al procedimiento 
 
-            //Se Sustitulle los valores a enviar en el procedimiento almacenado
+            //Se Sustituye los valores a enviar en el procedimiento almacenado
             cstmt.setInt(1, idCategoria);
 
             //Se ejecuta la consulta
@@ -1215,7 +1217,7 @@ public class CategoriaJDBC {
         return filaAfectadas;
     }
 
-    //Método para obtener las categorias
+    //Método para obtener las categorías
     public DefaultTableModel consultarCategorias(String nombreCat) {
         //Objeto de conexión
         Connection conn = null;
@@ -1234,7 +1236,7 @@ public class CategoriaJDBC {
             conn = conexionSQLServer.getConnection(); //Se obtiene la conexion desde la clase Conexion SQL Server
             cstmt = conn.prepareCall(SQL_SELECT_SP, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY); //Se prepara la llamada al procedimiento 
 
-            //Se Sustitulle los valores a enviar en el procedimiento almacenado
+            //Se Sustituye los valores a enviar en el procedimiento almacenado
             cstmt.setString(1, nombreCat);
 
             //Se ejecuta la consulta
@@ -1264,10 +1266,1160 @@ public class CategoriaJDBC {
         return modeloTabla;
     }
 }
-
  
- 
- ```
+```
+
+En este punto se deberá de crear la lógica para que la interfaz gráfica de usuario se obtenga los datos y los envié  a traves del JDBC a la base de datos, por esta razón en se deberá generar el siguiente código en el JFrame con el nombre de "frmCategoria":
+
+Como variables a nivel de clase se deberá crear las siguientes:
+```java
+    boolean nuevo = true; //Indicador para saber si es una categoría nueva
+    int idCategoria = 0; //Almacenara el Id de la categoría a modificar/eliminar
+    CategoriaJDBC cat = new CategoriaJDBC(); // Instancia de jdbc para el uso de los métodos
+
+```
+Ahora se deberá de crear dos métodos uno para limpiar los datos de los controles y el otro para obtener la información de las categorías de la base de datos
+```java
+     public void limpiarDatos() {
+        txtNombreCat.setText("");
+        txtBuscarCat.setText("");
+        idCategoria = 0;
+        nuevo = true;
+    }
+
+    public void cargarDatos(String categoria) {
+
+        //VCarga el modelo de la tabla con sus datos, gracias al método ConsultarCategoria del JDBC
+        DefaultTableModel modelo = cat.consultarCategorias(categoria);
+        tblListaCategorias.setModel(modelo);
+    }
+```
+
+Ahora en el evento clic del botón de guardar se requiere el siguiente código:
+
+```java
+    private void btnGuardarCatActionPerformed(java.awt.event.ActionEvent evt) {                                              
+
+        String nombreCat = txtNombreCat.getText(); //Obtener el dato del textfield
+
+        if (nombreCat.equals("")) {
+            JOptionPane.showMessageDialog(this, "Debes digitar una nombre para la Categoría");
+            return;
+        }
+        int row = 0;
+        if (nuevo) {
+
+            row = cat.registrarCategoria(nombreCat); //Llamar al método que encarga de registrar la categoría  
+
+            if (row > 0) {
+                JOptionPane.showMessageDialog(this, "Se Registro la Categoría");
+            } else {
+                JOptionPane.showMessageDialog(this, "No Se Registro la Categoría", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            row = cat.modificarCategoria(idCategoria, nombreCat); //Llamar al método que encarga de registrar la categoría 
+            if (row > 0) {
+                JOptionPane.showMessageDialog(this, "Se Modifico la Categoría");
+            } else {
+                JOptionPane.showMessageDialog(this, "No Se Modifico la Categoría", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        limpiarDatos();
+        cargarDatos(null);
+    }     
+```
+Luego se deberá generar un evento de tipo Mouse Pressed para la jTable y en el escribir el siguiente código:
+
+```java
+    private void tblListaCategoriasMousePressed(java.awt.event.MouseEvent evt) {                                                
+
+        idCategoria = Integer.parseInt(tblListaCategorias.getValueAt(tblListaCategorias.getSelectedRow(), 0).toString());
+        txtNombreCat.setText(tblListaCategorias.getValueAt(tblListaCategorias.getSelectedRow(), 1).toString());
+
+        if (idCategoria > 0) {
+            nuevo = false;
+        }
+    }                                               
+
+```
+En el código anterior lo que se obtiene el la fila seleccionada y los datos del id y el nombre de la categoría para su posterior modificación.
+
+Luego se deberá de crear un evento KeyPress en el control txtBuscarCat y en el se digitar el siguiente código:
+```java 
+    private void txtBuscarCatKeyReleased(java.awt.event.KeyEvent evt) {                                         
+        String filtro = txtBuscarCat.getText();
+        //Se invoca el método para cargar los datos pero se le pasa como parámetro el texto a buscar 
+        cargarDatos(filtro);
+    }  
+```
+En el evento clic (actionPerformed) del botón de limpiar se escribe el siguiente código:
+```java
+  private void btnLimpiarCatActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        limpiarDatos();
+    }    
+```
+
+En el evento clic (actionPerformed) del botón de **Eliminar** se deberá colocar el siguiente código:
+
+```java
+    private void btnEliminarCatActionPerformed(java.awt.event.ActionEvent evt) {                                               
+       if(idCategoria == 0){
+              JOptionPane.showMessageDialog(this, "Debes seleccionar una categoría para eliminarla", "Error", JOptionPane.ERROR_MESSAGE);
+              return;
+        }
+        
+       int opcion = JOptionPane.showConfirmDialog(this, "Esta segura que desea eliminar la categoría seleccionada?");
+        
+       if(opcion == 0){
+          cat.eliminarCategoria(idCategoria);
+          JOptionPane.showMessageDialog(this, "Se elimino la Categoría");
+          limpiarDatos();
+          cargarDatos(null);
+       }   
+    }  
+
+```
+Luego se deberá modificar el constructor con nombre **frmCategoria()**
+
+```java
+    public frmCategoria() {
+        initComponents();
+        cargarDatos(null); //Se carga la lista de categorías
+    }
+```
+
+***El código Completo de la GUI de categoría se muestra a continuación:***
+
+```java
+
+package gui;
+
+import ModeloJDBC.CategoriaJDBC;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author Seth
+ */
+public class frmCategoria extends javax.swing.JFrame {
+
+    boolean nuevo = true; //Indicador para saber si es una categoría nueva
+    int idCategoria = 0; //Almacenara el Id de la categoría a modificar/eliminar
+    CategoriaJDBC cat = new CategoriaJDBC(); // Instancia de jdbc para el uso de los métodos
+
+    /**
+     * Creates new form frmCategoria
+     */
+    public frmCategoria() {
+        initComponents();
+        cargarDatos(null);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jPanel2 = new javax.swing.JPanel();
+        txtBuscarCat = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblListaCategorias = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        txtNombreCat = new javax.swing.JTextField();
+        btnGuardarCat = new javax.swing.JButton();
+        btnEliminarCat = new javax.swing.JButton();
+        btnLimpiarCat = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lista de Categorías", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+
+        txtBuscarCat.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBuscarCatKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarCatKeyReleased(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setText("Buscar:");
+
+        tblListaCategorias.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        tblListaCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblListaCategoriasMousePressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblListaCategorias);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtBuscarCat)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBuscarCat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setText("Control de Categorías");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos de la Categoría", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        jPanel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel2.setText("Nombre de la Categoría");
+
+        btnGuardarCat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/save.png"))); // NOI18N
+        btnGuardarCat.setText("Guardar");
+        btnGuardarCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarCatActionPerformed(evt);
+            }
+        });
+
+        btnEliminarCat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/delete.png"))); // NOI18N
+        btnEliminarCat.setText("Eliminar");
+        btnEliminarCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarCatActionPerformed(evt);
+            }
+        });
+
+        btnLimpiarCat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/clean.png"))); // NOI18N
+        btnLimpiarCat.setText("Limpiar");
+        btnLimpiarCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarCatActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(txtNombreCat)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnGuardarCat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEliminarCat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnLimpiarCat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtNombreCat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnEliminarCat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLimpiarCat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGuardarCat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(116, 116, 116)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>                        
+
+    private void btnGuardarCatActionPerformed(java.awt.event.ActionEvent evt) {                                              
+
+        String nombreCat = txtNombreCat.getText(); //Obtener el dato del textfield
+
+        if (nombreCat.equals("")) {
+            JOptionPane.showMessageDialog(this, "Debes digitar una nombre para la Categoría");
+            return;
+        }
+        int row = 0;
+        if (nuevo) {
+
+            row = cat.registrarCategoria(nombreCat); //Llamar al método que encarga de registrar la categoria  
+
+            if (row > 0) {
+                JOptionPane.showMessageDialog(this, "Se Registro la Categoría");
+            } else {
+                JOptionPane.showMessageDialog(this, "No Se Registro la Categoría", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            row = cat.modificarCategoria(idCategoria, nombreCat); //Llamar al método que encarga de registrar la categoria 
+            if (row > 0) {
+                JOptionPane.showMessageDialog(this, "Se Modifico la Categoría");
+            } else {
+                JOptionPane.showMessageDialog(this, "No Se Modifico la Categoría", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        limpiarDatos();
+        cargarDatos(null);
+    }                                             
+
+    private void txtBuscarCatKeyPressed(java.awt.event.KeyEvent evt) {                                        
 
 
+    }                                       
 
+    private void txtBuscarCatKeyReleased(java.awt.event.KeyEvent evt) {                                         
+        String filtro = txtBuscarCat.getText();
+        //Se invoca el método para cargar los datos pero se le pasa como parámetro el texto a buscar 
+        cargarDatos(filtro);
+    }                                        
+
+    private void tblListaCategoriasMousePressed(java.awt.event.MouseEvent evt) {                                                
+
+        idCategoria = Integer.parseInt(tblListaCategorias.getValueAt(tblListaCategorias.getSelectedRow(), 0).toString());
+        txtNombreCat.setText(tblListaCategorias.getValueAt(tblListaCategorias.getSelectedRow(), 1).toString());
+
+        if (idCategoria > 0) {
+            nuevo = false;
+        }
+    }                                               
+
+    private void btnLimpiarCatActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        limpiarDatos();
+    }                                             
+
+    private void btnEliminarCatActionPerformed(java.awt.event.ActionEvent evt) {                                               
+       if(idCategoria == 0){
+              JOptionPane.showMessageDialog(this, "Debes seleccionar una categoría para eliminarla", "Error", JOptionPane.ERROR_MESSAGE);
+              return;
+        }
+        
+       int opcion = JOptionPane.showConfirmDialog(this, "Esta segura que desea eliminar la categoría seleccionada?");
+        
+       if(opcion == 0){
+          cat.eliminarCategoria(idCategoria);
+          JOptionPane.showMessageDialog(this, "Se elimino la Categoría");
+          limpiarDatos();
+          cargarDatos(null);
+       }   
+    }                                              
+
+    public void limpiarDatos() {
+        txtNombreCat.setText("");
+        txtBuscarCat.setText("");
+        idCategoria = 0;
+        nuevo = true;
+    }
+
+    public void cargarDatos(String categoria) {
+
+        //VCarga el modelo de la tabla con sus datos, gracias al metodo ConsultarCategoria del JDBC
+        DefaultTableModel modelo = cat.consultarCategorias(categoria);
+        tblListaCategorias.setModel(modelo);
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton btnEliminarCat;
+    private javax.swing.JButton btnGuardarCat;
+    private javax.swing.JButton btnLimpiarCat;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblListaCategorias;
+    private javax.swing.JTextField txtBuscarCat;
+    private javax.swing.JTextField txtNombreCat;
+    // End of variables declaration                   
+}
+
+```
+
+#### Control de Proveedores
+
+De forma similar a lo realizado en el control de las categorías se deberá crear una nueva clase en el paquete **ModeloJDBC** con el nombre de **ProveedorJDBC** en esta se deberá digitar el siguiente código:
+
+```java
+package ModeloJDBC;
+
+import ConexionBD.conexionSQLServer;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author Seth
+ */
+public class ProveedorJDBC {
+
+    private final String SQL_INSERT_SP = "{CALL spCrearProveedor(?,?,?)}";
+    private final String SQL_UPDATE_SP = "{CALL spActualizarProveedor(?,?,?,?)}";
+    private final String SQL_DELETE_SP = "{CALL spEliminarProveedor(?)}";
+    private final String SQL_SELECT_SP = "{CALL spObtenerProveedores(?)}";
+
+    //Método para registrar la Proveedor
+    public int registrarProveedor(String nombreProv, String direccionProv, String telefonoProv) {
+
+        //Objeto de conexión
+        Connection conn = null;
+        // prepareCall -> para realizar el llamado del procedimiento almacenado
+        CallableStatement cstmt = null;
+
+        int filaAfectadas = 0;
+
+        try {
+
+            conn = conexionSQLServer.getConnection(); //Se obtiene la conexion desde la clase Conexion SQL Server
+            cstmt = conn.prepareCall(SQL_INSERT_SP); //Se prepara la llamada al procedimiento 
+
+            //Se Sustituye los valores a enviar en el procedimiento almacenado
+            cstmt.setString(1, nombreProv);
+            cstmt.setString(2, direccionProv);
+            cstmt.setString(3, telefonoProv);
+
+            //Se ejecuta la consulta
+            System.out.println("Ejecutando la Registro de Proveedor");
+            cstmt.execute();
+            filaAfectadas = cstmt.getUpdateCount();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            conexionSQLServer.close(cstmt);
+            conexionSQLServer.close(conn);
+        }
+
+        return filaAfectadas;
+
+    }
+
+    //Método para modificar Proveedor
+    public int modificarProv(int idProv, String nombreProv, String direccionProv, String telefonoProv) {
+
+        //Objeto de conexión
+        Connection conn = null;
+        // prepareCall -> para realizar el llamado del procedimiento almacenado
+        CallableStatement cstmt = null;
+
+        int filaAfectadas = 0;
+
+        try {
+
+            conn = conexionSQLServer.getConnection(); //Se obtiene la conexion desde la clase Conexion SQL Server
+            cstmt = conn.prepareCall(SQL_UPDATE_SP); //Se prepara la llamada al procedimiento 
+
+            //Se Sustituye los valores a enviar en el procedimiento almacenado
+            cstmt.setInt(1, idProv);
+            cstmt.setString(2, nombreProv);
+            cstmt.setString(3, direccionProv);
+            cstmt.setString(4, telefonoProv);
+
+            //Se ejecuta la consulta
+            System.out.println("Ejecutando la Modifico el proveedor");
+            cstmt.execute();
+            filaAfectadas = cstmt.getUpdateCount();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            conexionSQLServer.close(cstmt);
+            conexionSQLServer.close(conn);
+        }
+
+        return filaAfectadas;
+
+    }
+
+    //Método para eliminar proveedor
+    public int eliminarProveedor(int idProv) {
+
+        //Objeto de conexión
+        Connection conn = null;
+        // prepareCall -> para realizar el llamado del procedimiento almacenado
+        CallableStatement cstmt = null;
+
+        int filaAfectadas = 0;
+
+        try {
+
+            conn = conexionSQLServer.getConnection(); //Se obtiene la conexion desde la clase Conexion SQL Server
+            cstmt = conn.prepareCall(SQL_DELETE_SP); //Se prepara la llamada al procedimiento 
+
+            //Se Sustituye los valores a enviar en el procedimiento almacenado
+            cstmt.setInt(1, idProv);
+
+            //Se ejecuta la consulta
+            System.out.println("Ejecutando la elimino el proveedor");
+            cstmt.execute();
+            filaAfectadas = cstmt.getUpdateCount();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            conexionSQLServer.close(cstmt);
+            conexionSQLServer.close(conn);
+        }
+
+        return filaAfectadas;
+    }
+
+    //Método para obtener las proveedores
+    public DefaultTableModel consultarProveedores(String nombreProv) {
+        //Objeto de conexión
+        Connection conn = null;
+        // prepareCall -> para realizar el llamado del procedimiento almacenado
+        CallableStatement cstmt = null;
+        ResultSet rs = null;
+
+        //Creación del modelo de la tabla
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        modeloTabla.addColumn("ID");
+        modeloTabla.addColumn("Nombre");
+        modeloTabla.addColumn("Dirección");
+        modeloTabla.addColumn("Teléfono");
+        
+        try {
+
+            conn = conexionSQLServer.getConnection(); //Se obtiene la conexion desde la clase Conexion SQL Server
+            cstmt = conn.prepareCall(SQL_SELECT_SP, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY); //Se prepara la llamada al procedimiento 
+
+            //Se Sustituye los valores a enviar en el procedimiento almacenado
+            cstmt.setString(1, nombreProv);
+
+            //Se ejecuta la consulta
+            System.out.println("Ejecutando consulta de Proveedor");
+            boolean resultado = cstmt.execute();
+
+            // Comprobar si hay un conjunto de resultados
+            if (resultado) {
+                // Devolver el conjunto de resultados
+                rs = cstmt.getResultSet();
+                while (rs.next()) {
+                    // Acceder a los datos de cada fila
+                    int id = rs.getInt("idProveedor");
+                    String nombre = rs.getString("nombre");
+                     String direccion = rs.getString("direccion");
+                      String telefono = rs.getString("telefono");
+                    modeloTabla.addRow(new Object[]{id, nombre,direccion, telefono});
+                }
+            }
+			
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            conexionSQLServer.close(cstmt);
+            conexionSQLServer.close(conn);
+            conexionSQLServer.close(rs);
+        }
+
+        return modeloTabla;
+    }
+}
+```
+
+En este punto se deberá de crear la lógica para que de la GUI se obtenga los datos y los envié  a traves del JDBC a la base de datos, por esta razón en se deberá generar el siguiente código en el JFrame con el nombre de "frmControlProveedor":
+
+Como variables a nivel de clase se deberá crear las siguientes:
+```java
+    boolean nuevoProv = true; //Indicador para saber si es una proveedor nueva
+    int idProveedor = 0; //Almacenara el Id de la proveedor a modificar/eliminar
+    ProveedorJDBC provJDBC = new ProveedorJDBC(); // Instancia de jdbc para el uso de los métodos
+
+```
+Ahora se deberá de crear dos métodos uno para limpiar los datos de los controles y el otro para obtener la información de los proveedores de la base de datos
+
+```java
+ public void limpiarDatos() {
+        txtNombreProv.setText("");
+        txtBuscarProv.setText("");
+        txtTelefonoProv.setText("");
+        txaDireccionProv.setText("");
+        idProveedor = 0;
+        nuevoProv = true;
+    }
+
+    public void cargarDatos(String filtro) {
+
+        //VCarga el modelo de la tabla con sus datos, gracias al metodo ConsultarCategoria del JDBC
+        DefaultTableModel modelo = provJDBC.consultarProveedores(filtro);
+        tblListaProveedores.setModel(modelo);
+    }
+```
+Ahora en el evento clic (actionPerformed) del botón guardar se deberá digitar el siguiente código:
+```java
+private void btnGuardarProvActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        //Obtener el dato del textfield       
+        String nombreProv = txtNombreProv.getText(); 
+        String telefono = txtTelefonoProv.getText();
+        String direccion = txaDireccionProv.getText();
+               
+
+        if (nombreProv.equals("")) {
+            JOptionPane.showMessageDialog(this, "Debes digitar una nombre para el proveedor");
+            return;
+        }
+        int row = 0;
+        if (nuevoProv) {
+            row = provJDBC.registrarProveedor(nombreProv,direccion,telefono); //Llamar al metodo que encarga de registrar la categoria  
+
+            if (row > 0) {
+                JOptionPane.showMessageDialog(this, "Se Registro el Proveedor");
+            } else {
+                JOptionPane.showMessageDialog(this, "No Se Registro el Proveedor", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            row = provJDBC.modificarProv(idProveedor, nombreProv,direccion,telefono); //Llamar al metodo que encarga de registrar la categoria 
+            if (row > 0) {
+                JOptionPane.showMessageDialog(this, "Se Modifico el proveedor");
+            } else {
+                JOptionPane.showMessageDialog(this, "No Se Modifico el Proveedor", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        limpiarDatos();
+        cargarDatos(null);
+    }    
+
+```
+
+En el evento actionPerformed del botón Eliminar se deberá digitar el siguiente código:
+
+```java 
+private void btnEliminarProvActionPerformed(java.awt.event.ActionEvent evt) {                                                
+    if(idProveedor == 0){
+        JOptionPane.showMessageDialog(this, "Debes seleccionar un Proveedor para eliminarlo", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+        
+    int opcion = JOptionPane.showConfirmDialog(this, "Esta segura que desea eliminar la proveedor seleccionada?");
+        
+    if(opcion == 0){
+          provJDBC.eliminarProveedor(idProveedor);
+          JOptionPane.showMessageDialog(this, "Se elimino el proveedor");
+          limpiarDatos();
+          cargarDatos(null);
+    }  
+}  
+
+```
+
+En el evento KeyReleased del textField Buscar Proveedor se deberá digitar el siguiente código:
+
+```java
+    private void txtBuscarProvKeyReleased(java.awt.event.KeyEvent evt) {                                          
+          String filtro = txtBuscarProv.getText();
+        //Se invoca el método para cargar los datos pero se le pasa como parámetro el texto a buscar 
+        cargarDatos(filtro);
+    }  
+```
+
+En el evento MouseReleased de la JTable listaProveedores se deberá redactar el siguiente código:
+
+```java
+   private void tblListaProveedoresMouseReleased(java.awt.event.MouseEvent evt) {     
+
+        //Se obtiene cada uno de los datos de la fila seleccionada                                              
+        idProveedor = Integer.parseInt(tblListaProveedores.getValueAt(tblListaProveedores.getSelectedRow(), 0).toString());
+         
+        txtNombreProv.setText(tblListaProveedores.getValueAt(tblListaProveedores.getSelectedRow(), 1).toString());
+        
+        txaDireccionProv.setText(tblListaProveedores.getValueAt(tblListaProveedores.getSelectedRow(), 2).toString());
+        
+       txtTelefonoProv.setText(tblListaProveedores.getValueAt(tblListaProveedores.getSelectedRow(), 3).toString());       
+              
+        if (idProveedor > 0) {
+            nuevoProv = false;
+        }
+        
+    }  
+        
+```
+
+Por ultimo en el evento actionPerformed del botón limpiar se deberá llamar al método **limpiarDatos**:
+
+```java
+   private void btnLimpiarProvActionPerformed(java.awt.event.ActionEvent evt) {                                               
+       limpiarDatos();
+    } 
+
+```
+#### Control de Productos
+
+
+De forma similar a lo realizado en el control de las categorías se deberá crear una nueva clase en el paquete **ModeloJDBC** con el nombre de **ProductoJDBC** en esta se deberá digitar el siguiente código:
+
+```java
+package ModeloJDBC;
+
+import ConexionBD.conexionSQLServer;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author Seth
+ */
+public class ProductoJDBC {
+
+    private final String SQL_INSERT_SP = "{CALL sp_AgregarProducto(?,?,?,?,?,?)}";
+    private final String SQL_UPDATE_SP = "{CALL spActualizarProveedor(?,?,?,?,?,?,?)}";
+    private final String SQL_DELETE_SP = "{CALL sp_EliminarProducto(?)}";
+    private final String SQL_SELECT_SP = "{CALL sp_ConsultarProducto(?,?,?)}";
+
+    //Método para registrar la productos
+    public int registrarProducto(String nombreProd, BigDecimal precio, int cantidad, byte[] image, int idCategoria, int idProveedor) {
+
+        //Objeto de conexión
+        Connection conn = null;
+        // prepareCall -> para realizar el llamado del procedimiento almacenado
+        CallableStatement cstmt = null;
+
+        int filaAfectadas = 0;
+
+        try {
+
+            conn = conexionSQLServer.getConnection(); //Se obtiene la conexion desde la clase Conexion SQL Server
+            cstmt = conn.prepareCall(SQL_INSERT_SP); //Se prepara la llamada al procedimiento 
+
+            //Se Sustituye los valores a enviar en el procedimiento almacenado
+            cstmt.setString(1, nombreProd);
+            cstmt.setBigDecimal(2, precio);
+            cstmt.setInt(3, cantidad);
+            cstmt.setBytes(4, image);
+            cstmt.setInt(5, idCategoria);
+            cstmt.setInt(6, idProveedor);
+
+            //Se ejecuta la consulta
+            System.out.println("Ejecutando la Registro de Producto");
+            cstmt.execute();
+            filaAfectadas = cstmt.getUpdateCount();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            conexionSQLServer.close(cstmt);
+            conexionSQLServer.close(conn);
+        }
+
+        return filaAfectadas;
+
+    }
+
+    //Método para modificar productos
+    public int modificarProd(int idProd, String nombreProd, BigDecimal precio, int cantidad, byte[] image, int idCategoria, int idProveedor) {
+
+        //Objeto de conexión
+        Connection conn = null;
+        // prepareCall -> para realizar el llamado del procedimiento almacenado
+        CallableStatement cstmt = null;
+
+        int filaAfectadas = 0;
+
+        try {
+
+            conn = conexionSQLServer.getConnection(); //Se obtiene la conexion desde la clase Conexion SQL Server
+            cstmt = conn.prepareCall(SQL_UPDATE_SP); //Se prepara la llamada al procedimiento 
+
+            //Se Sustituye los valores a enviar en el procedimiento almacenado
+            cstmt.setInt(1, idProd);
+            cstmt.setString(2, nombreProd);
+            cstmt.setBigDecimal(3, precio);
+            cstmt.setInt(4, cantidad);
+            cstmt.setBytes(5, image);
+            cstmt.setInt(6, idCategoria);
+            cstmt.setInt(7, idProveedor);
+
+            //Se ejecuta la consulta
+            System.out.println("Ejecutando la Modifico el Producto");
+            cstmt.execute();
+            filaAfectadas = cstmt.getUpdateCount();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            conexionSQLServer.close(cstmt);
+            conexionSQLServer.close(conn);
+        }
+
+        return filaAfectadas;
+
+    }
+
+    //Método para eliminar productos
+    public int eliminarProd(int idProd) {
+
+        //Objeto de conexión
+        Connection conn = null;
+        // prepareCall -> para realizar el llamado del procedimiento almacenado
+        CallableStatement cstmt = null;
+
+        int filaAfectadas = 0;
+
+        try {
+
+            conn = conexionSQLServer.getConnection(); //Se obtiene la conexion desde la clase Conexion SQL Server
+            cstmt = conn.prepareCall(SQL_DELETE_SP); //Se prepara la llamada al procedimiento 
+
+            //Se Sustituye los valores a enviar en el procedimiento almacenado
+            cstmt.setInt(1, idProd);
+
+            //Se ejecuta la consulta
+            System.out.println("Ejecutando la elimino el productos");
+            cstmt.execute();
+            filaAfectadas = cstmt.getUpdateCount();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            conexionSQLServer.close(cstmt);
+            conexionSQLServer.close(conn);
+        }
+
+        return filaAfectadas;
+    }
+
+    //Método para obtener las productos
+    public DefaultTableModel consultarProd(Integer idCategoria, Integer idProveedor, String nombreProd) {
+        //Objeto de conexión
+        Connection conn = null;
+        // prepareCall -> para realizar el llamado del procedimiento almacenado
+        CallableStatement cstmt = null;
+        ResultSet rs = null;
+
+        //Creación del modelo de la tabla
+        DefaultTableModel modeloTabla = new DefaultTableModel() {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 4) { // Índice de la columna de la imagen
+                    return ImageIcon.class;
+                }
+                return super.getColumnClass(columnIndex);
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Puedes ajustar esto según tus necesidades
+                return false;
+            }
+        };
+
+        modeloTabla.addColumn("ID");
+        modeloTabla.addColumn("Producto");
+        modeloTabla.addColumn("Precio");
+        modeloTabla.addColumn("Stock");
+        modeloTabla.addColumn("Imagen");
+        modeloTabla.addColumn("ID Categoría");
+        modeloTabla.addColumn("Categoria");
+        modeloTabla.addColumn("ID Proveedor");
+        modeloTabla.addColumn("Proveedor");
+
+        try {
+
+            conn = conexionSQLServer.getConnection(); //Se obtiene la conexion desde la clase Conexion SQL Server
+            cstmt = conn.prepareCall(SQL_SELECT_SP, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY); //Se prepara la llamada al procedimiento 
+
+            //Se Sustituye los valores a enviar en el procedimiento almacenado
+            cstmt.setObject(1, idProveedor);
+            cstmt.setObject(2, idCategoria);
+            cstmt.setString(3, nombreProd);
+
+            //Se ejecuta la consulta
+            System.out.println("Ejecutando consulta de Producto");
+            boolean resultado = cstmt.execute();
+
+            // Comprobar si hay un conjunto de resultados
+            if (resultado) {
+                // Devolver el conjunto de resultados
+                rs = cstmt.getResultSet();
+                while (rs.next()) {
+                    // Acceder a los datos de cada fila
+                    int id = rs.getInt("idProducto");
+                    String nombre = rs.getString("producto");
+                    BigDecimal precio = rs.getBigDecimal("precio");
+                    int stock = rs.getInt("stock");
+                    byte[] image = rs.getBytes("imagen");
+                    int idCat = rs.getInt("idCategoria");
+                    String categoria = rs.getString("categoria");
+                    int idProve = rs.getInt("idproveedor");
+                    String prove = rs.getString("proveedor");
+
+                    modeloTabla.addRow(new Object[]{id, nombre, precio, stock, bytesToImageIcon(image), idCat, categoria, idProve, prove});
+                }
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            conexionSQLServer.close(cstmt);
+            conexionSQLServer.close(conn);
+            conexionSQLServer.close(rs);
+        }
+
+        return modeloTabla;
+    }
+
+    // Método para convertir bytes de imagen a ImageIcon
+    private ImageIcon bytesToImageIcon(byte[] imageData) {
+        try {
+            BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageData));
+            Image scaledImage = bufferedImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            return new ImageIcon(scaledImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+
+
+```
+
+En la GUI de productos **frmProductos** deberemos crear los siguientes eventos y códigos:
+
+Como variables a nivel de clase se deberá crear las siguientes:
+```java
+    byte[] datosImagen = null;
+    ProveedorJDBC provJDBC = new ProveedorJDBC();// Instancia de jdbc para el uso de los métodos
+    CategoriaJDBC cat = new CategoriaJDBC();    // Instancia de jdbc para el uso de los métodos
+    ProductoJDBC prodJDBC = new ProductoJDBC(); // Instancia de jdbc para el uso de los métodos
+    boolean nuevoProd = true;
+    int idProducto = 0;
+
+```
+Ahora se deberá de crear dos métodos uno para limpiar los datos de los controles y el otro para obtener la información de los productos y para poder cargar los datos de los combobox de Proveedores y Categorías de la base de datos:
+
+```java
+ private void limpiarDatos(){
+      txtNombreProd.setText("");
+       txtPrecioProd.setText("");
+       spnCantidadProd.setValue(0);
+       datosImagen = null;
+       lblImageProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/picture.png"))); 
+
+    }
+    
+    private static byte[] leerImagenComoBytes(String rutaImagen) throws IOException {
+        File file = new File(rutaImagen);
+        byte[] datosImagen = new byte[(int) file.length()];
+
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+            fileInputStream.read(datosImagen);
+        }
+
+        return datosImagen;
+    }
+
+    private void CargarComboBox() {
+        DefaultTableModel modeloTablaProv = provJDBC.consultarProveedores(null);
+        DefaultTableModel modeloTablaCat = cat.consultarCategorias(null);
+        // Crear el JComboBox personalizado con el ComboBoxModel
+        ComboBoxModel<String> comboBoxModelProv = new DefaultComboBoxModel<>(obtenerDatosComboBox(modeloTablaProv));
+
+        // Crear el JComboBox personalizado con el ComboBoxModel
+        ComboBoxModel<String> comboBoxModelCat = new DefaultComboBoxModel<>(obtenerDatosComboBox(modeloTablaCat));
+
+        // Establecer el modelo de ComboBox en el JComboBox cmbProveedor
+        cmbProveedor.setModel(comboBoxModelProv);
+        cmbProveedorFiltro.setModel(comboBoxModelProv);
+
+        // Establecer el modelo de ComboBox en el JComboBox Categoría
+        cmbCategoria.setModel(comboBoxModelCat);
+        cmbCategoriaFiltro.setModel(comboBoxModelCat);
+    }
+
+    private String[] obtenerDatosComboBox(DefaultTableModel modeloTabla) {
+        int filas = modeloTabla.getRowCount();
+        String[] items = new String[filas];
+
+        for (int i = 0; i < filas; i++) {
+            int id = (int) modeloTabla.getValueAt(i, 0);
+            String nombre = (String) modeloTabla.getValueAt(i, 1);
+            items[i] = id + " - " + nombre;
+        }
+
+        return items;
+    }
+
+    private void consultarProductos(Integer idCat, Integer idProv, String nombreProd){
+    
+        DefaultTableModel modelo = prodJDBC.consultarProd(idCat, idProv, nombreProd);
+         //VCarga el modelo de la tabla con sus datos, gracias al metodo ConsultarCategoria del JDBC        
+        tblListaProductos.setModel(modelo);
+    }
+
+```
+
+Ahora en el evento ActionPerformed del botos ***Buscar Imagen*** colocamos el siguiente código:
+```java 
+ private void btnBuscarImageActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        JFileChooser file = new JFileChooser();
+        file.showOpenDialog(this);
+
+        File archivo = file.getSelectedFile();
+
+        if (archivo != null) {
+            try {
+                String ruta = archivo.getPath();
+                datosImagen = leerImagenComoBytes(ruta);
+
+                ImageIcon icon = new ImageIcon(ruta);
+                Image image = icon.getImage().getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
+                icon = new ImageIcon(image);
+
+                lblImageProd.setIcon(icon);
+            } catch (IOException ex) {
+                Logger.getLogger(frmProducto.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }  
+
+```
+
+En el evento ProdKeyTyped del jTextField para ingresar el precio se deberá colocar el siguiente código para limitar los caracteres a solo números y puntos:
+
+
+```java
+ private void txtPrecioProdKeyTyped(java.awt.event.KeyEvent evt) {                                       
+
+        char car = evt.getKeyChar();
+
+        // Permitir solo dígitos y al menos un punto decimal
+        if (!Character.isDigit(car) && car != '.' && txtPrecioProd.getText().contains(".")) {
+            evt.consume();
+        }
+
+    }                                      
+
+```
+En el evento ActionPerformed del botón Guardar se deberá colocar el siguiente código:
+
+```java 
+  private void btnGuardarProdActionPerformed(java.awt.event.ActionEvent evt) {                                               
+       
+          //Obtener el dato del textfield       
+        String nombreProd = txtNombreProd.getText(); 
+        BigDecimal precio = new BigDecimal(txtPrecioProd.getText().trim());
+        int cantidad = (int) spnCantidadProd.getValue();
+        //Obtiene el proveedor seleccionado
+        String selectedItem = (String) cmbProveedor.getSelectedItem();
+        int idProv = Integer.parseInt(selectedItem.split(" - ")[0]);
+               
+        //Obtiene el categoría seleccionado
+        selectedItem = (String) cmbCategoria.getSelectedItem();
+        int idCat = Integer.parseInt(selectedItem.split(" - ")[0]);
+                   
+
+        if (nombreProd.equals("")) {
+            JOptionPane.showMessageDialog(this, "Debes digitar una nombre para el Productos");
+            return;
+        }
+        //Aplicar mas validaciones.
+        
+        int row = 0;
+        if (nuevoProd) {
+            row = prodJDBC.registrarProducto(nombreProd,precio,cantidad,datosImagen, idCat, idProv); //Llamar al metodo que encarga de registrar la categoria  
+
+            if (row > 0) {
+                JOptionPane.showMessageDialog(this, "Se Registro el Productos");
+            } else {
+                JOptionPane.showMessageDialog(this, "No Se Registro el Productos", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            
+            //Realizar pasos para la modificación - Practica.
+            
+        }
+
+        limpiarDatos();
+        consultarProductos(null, null, null);       
+    } 
+
+```
+
+**Importante:** las demás funcionalidades quedaran sin resolver para que puedan practicar lo aprendido

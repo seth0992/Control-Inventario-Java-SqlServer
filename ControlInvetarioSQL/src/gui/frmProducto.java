@@ -4,14 +4,22 @@
  */
 package gui;
 
+import ModeloJDBC.CategoriaJDBC;
+import ModeloJDBC.ProductoJDBC;
+import ModeloJDBC.ProveedorJDBC;
 import java.awt.Image;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,12 +27,21 @@ import javax.swing.JFileChooser;
  */
 public class frmProducto extends javax.swing.JFrame {
 
-    byte[] datosImagen;
+    byte[] datosImagen = null;
+    ProveedorJDBC provJDBC = new ProveedorJDBC();// Instancia de jdbc para el uso de los métodos
+    CategoriaJDBC cat = new CategoriaJDBC();    // Instancia de jdbc para el uso de los métodos
+    ProductoJDBC prodJDBC = new ProductoJDBC(); // Instancia de jdbc para el uso de los métodos
+    boolean nuevoProd = true;
+    int idProducto = 0;
+
     /**
      * Creates new form frmProducto
      */
     public frmProducto() {
         initComponents();
+        
+        CargarComboBox();
+        consultarProductos(null, null, null);
     }
 
     /**
@@ -80,6 +97,12 @@ public class frmProducto extends javax.swing.JFrame {
 
         jLabel3.setText("Precio:");
 
+        txtPrecioProd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioProdKeyTyped(evt);
+            }
+        });
+
         jLabel4.setText("Cantidad:");
         jLabel4.setToolTipText("");
 
@@ -128,6 +151,11 @@ public class frmProducto extends javax.swing.JFrame {
 
         btnGuardarProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/save.png"))); // NOI18N
         btnGuardarProd.setText("     Guardar");
+        btnGuardarProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarProdActionPerformed(evt);
+            }
+        });
 
         btnEliminarProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/delete.png"))); // NOI18N
         btnEliminarProd.setText("     Eliminar");
@@ -284,13 +312,10 @@ public class frmProducto extends javax.swing.JFrame {
 
         tblListaProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "null"
             }
         ));
         jScrollPane1.setViewportView(tblListaProductos);
@@ -345,19 +370,18 @@ public class frmProducto extends javax.swing.JFrame {
     private void btnBuscarImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarImageActionPerformed
         JFileChooser file = new JFileChooser();
         file.showOpenDialog(this);
-        
+
         File archivo = file.getSelectedFile();
-        
-        if(archivo != null){
+
+        if (archivo != null) {
             try {
                 String ruta = archivo.getPath();
                 datosImagen = leerImagenComoBytes(ruta);
-                
-                
+
                 ImageIcon icon = new ImageIcon(ruta);
                 Image image = icon.getImage().getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
                 icon = new ImageIcon(image);
-                
+
                 lblImageProd.setIcon(icon);
             } catch (IOException ex) {
                 Logger.getLogger(frmProducto.class.getName()).log(Level.SEVERE, null, ex);
@@ -365,7 +389,70 @@ public class frmProducto extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBuscarImageActionPerformed
 
-     private static byte[] leerImagenComoBytes(String rutaImagen) throws IOException {
+    private void txtPrecioProdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioProdKeyTyped
+
+        char car = evt.getKeyChar();
+
+        // Permitir solo dígitos y al menos un punto decimal
+        if (!Character.isDigit(car) && car != '.' && txtPrecioProd.getText().contains(".")) {
+            evt.consume();
+        }
+
+    }//GEN-LAST:event_txtPrecioProdKeyTyped
+
+    private void btnGuardarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProdActionPerformed
+       
+          //Obtener el dato del textfield       
+        String nombreProd = txtNombreProd.getText(); 
+        BigDecimal precio = new BigDecimal(txtPrecioProd.getText().trim());
+        int cantidad = (int) spnCantidadProd.getValue();
+        //Obtiene el proveedor seleccionado
+        String selectedItem = (String) cmbProveedor.getSelectedItem();
+        int idProv = Integer.parseInt(selectedItem.split(" - ")[0]);
+               
+        //Obtiene el categoría seleccionado
+        selectedItem = (String) cmbCategoria.getSelectedItem();
+        int idCat = Integer.parseInt(selectedItem.split(" - ")[0]);
+                   
+
+        if (nombreProd.equals("")) {
+            JOptionPane.showMessageDialog(this, "Debes digitar una nombre para el Productos");
+            return;
+        }
+        //Aplicar mas validaciones.
+        
+        int row = 0;
+        if (nuevoProd) {
+            row = prodJDBC.registrarProducto(nombreProd,precio,cantidad,datosImagen, idCat, idProv); //Llamar al metodo que encarga de registrar la categoria  
+
+            if (row > 0) {
+                JOptionPane.showMessageDialog(this, "Se Registro el Productos");
+            } else {
+                JOptionPane.showMessageDialog(this, "No Se Registro el Productos", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            
+            //Realizar pasos para la modificación - Practica.
+            
+        }
+
+        limpiarDatos();
+        consultarProductos(null, null, null);
+        
+        
+    }//GEN-LAST:event_btnGuardarProdActionPerformed
+
+    private void limpiarDatos(){
+      txtNombreProd.setText("");
+       txtPrecioProd.setText("");
+       spnCantidadProd.setValue(0);
+       datosImagen = null;
+       lblImageProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/picture.png"))); 
+
+    }
+    
+    private static byte[] leerImagenComoBytes(String rutaImagen) throws IOException {
         File file = new File(rutaImagen);
         byte[] datosImagen = new byte[(int) file.length()];
 
@@ -375,7 +462,44 @@ public class frmProducto extends javax.swing.JFrame {
 
         return datosImagen;
     }
+
+    private void CargarComboBox() {
+        DefaultTableModel modeloTablaProv = provJDBC.consultarProveedores(null);
+        DefaultTableModel modeloTablaCat = cat.consultarCategorias(null);
+        // Crear el JComboBox personalizado con el ComboBoxModel
+        ComboBoxModel<String> comboBoxModelProv = new DefaultComboBoxModel<>(obtenerDatosComboBox(modeloTablaProv));
+
+        // Crear el JComboBox personalizado con el ComboBoxModel
+        ComboBoxModel<String> comboBoxModelCat = new DefaultComboBoxModel<>(obtenerDatosComboBox(modeloTablaCat));
+
+        // Establecer el modelo de ComboBox en el JComboBox cmbProveedor
+        cmbProveedor.setModel(comboBoxModelProv);
+        cmbProveedorFiltro.setModel(comboBoxModelProv);
+
+        // Establecer el modelo de ComboBox en el JComboBox Categoría
+        cmbCategoria.setModel(comboBoxModelCat);
+        cmbCategoriaFiltro.setModel(comboBoxModelCat);
+    }
+
+    private String[] obtenerDatosComboBox(DefaultTableModel modeloTabla) {
+        int filas = modeloTabla.getRowCount();
+        String[] items = new String[filas];
+
+        for (int i = 0; i < filas; i++) {
+            int id = (int) modeloTabla.getValueAt(i, 0);
+            String nombre = (String) modeloTabla.getValueAt(i, 1);
+            items[i] = id + " - " + nombre;
+        }
+
+        return items;
+    }
+
+    private void consultarProductos(Integer idCat, Integer idProv, String nombreProd){
     
+        DefaultTableModel modelo = prodJDBC.consultarProd(idCat, idProv, nombreProd);
+         //VCarga el modelo de la tabla con sus datos, gracias al metodo ConsultarCategoria del JDBC        
+        tblListaProductos.setModel(modelo);
+    }
     /**
      * @param args the command line arguments
      */
@@ -444,4 +568,7 @@ public class frmProducto extends javax.swing.JFrame {
     private javax.swing.JTextField txtPRoductoFiltro;
     private javax.swing.JTextField txtPrecioProd;
     // End of variables declaration//GEN-END:variables
+
+   
+
 }
